@@ -1,13 +1,13 @@
-# Group Study - Assignment Management Platform
+# ThinkFast - Assignment Management Platform
 
-Welcome to **Group Study**!  
+Welcome to **ThinkFast**!  
 A modern, user-friendly web application for managing assignments, submissions, and collaborative learning.
 
 ---
 
 ## 🌐 Live Demo
 
-- **Website:** [https://group-study00.netlify.app/](https://group-study00.netlify.app/)
+- **Website:** [https://think-fast00.netlify.app/](https://think-fast00.netlify.app/)
 - **Server API:** [https://groupstudyserver.vercel.app/](https://groupstudyserver.vercel.app/)
 
 ---
@@ -67,13 +67,13 @@ It empowers students and teachers to:
 
 ## 📸 Preview
 
-![Group Study Screenshot](https://i.ibb.co/6wQyQ7s/group-study-preview.png)
+![ThinkFast Screenshot](https://i.ibb.co/6wQyQ7s/group-study-preview.png)
 
 ---
 
 ## 💡 How to Use
 
-1. **Visit the [Live Website](https://group-study00.netlify.app/)**
+1. **Visit the [Live Website](https://think-fast00.netlify.app/)**
 2. **Register or Login** to your account.
 3. **Browse Assignments:** View, filter, and search assignments.
 4. **Create Assignment:** (If teacher) Add new assignments for students.
