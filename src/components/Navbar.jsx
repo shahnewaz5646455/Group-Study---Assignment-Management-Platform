@@ -4,13 +4,18 @@ import { MdAssignmentTurnedIn } from "react-icons/md";
 import { Link, NavLink } from "react-router";
 import { AuthContext } from "../contexts/AuthContext";
 import { toast } from "react-toastify";
+import { RiTeamFill } from "react-icons/ri";
+import { IoHome } from "react-icons/io5";
 
 export default function Navbar() {
   const { setDarkMode, darkMode, user, logout } = use(AuthContext);
   const damyphoto =
     "https://i.postimg.cc/HWwKx0JW/307ce493-b254-4b2d-8ba4-d12c080d6651.jpg";
 
-  // Theme toggle button
+  const handledark = () => {
+    setDarkMode(!darkMode);
+  };
+
   const ThemeToggle = () => (
     <button
       className="btn btn-ghost btn-circle text-xl"
@@ -26,11 +31,6 @@ export default function Navbar() {
     </button>
   );
 
-  const handledark = () => {
-    setDarkMode(!darkMode);
-  };
-
-  // Logout handler
   const handleLogout = async () => {
     try {
       await logout();
@@ -41,10 +41,31 @@ export default function Navbar() {
     }
   };
 
+  const closeDrawer = () => {
+    const drawer = document.getElementById("nav-drawer");
+    if (drawer) drawer.checked = false;
+  };
+
   const navLinks = (
     <>
       <li>
-        <NavLink to="/Assignments" className="font-medium">
+        <NavLink to="/" onClick={closeDrawer} className="font-medium">
+          <IoHome className="inline-block text-lg mr-1" />
+          Home
+        </NavLink>
+      </li>
+      <li>
+        <NavLink to="/" onClick={closeDrawer} className="font-medium">
+          <RiTeamFill className="inline-block text-lg mr-1" />
+          About
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/Assignments"
+          onClick={closeDrawer}
+          className="font-medium"
+        >
           <MdAssignmentTurnedIn className="inline-block text-lg mr-1" />
           Assignments
         </NavLink>
@@ -52,13 +73,23 @@ export default function Navbar() {
       {user && (
         <>
           <li>
-            <NavLink to="/pending" className="font-medium">
+            <NavLink
+              to="/pending"
+              onClick={closeDrawer}
+              className="font-medium"
+            >
               Pending
             </NavLink>
           </li>
           <li>
-            <button onClick={handleLogout} className="font-semibold border-2 ">
-              <FiLogOut className="inline-block mr-1 text-lg " />
+            <button
+              onClick={() => {
+                handleLogout();
+                closeDrawer();
+              }}
+              className="font-semibold border-2"
+            >
+              <FiLogOut className="inline-block mr-1 text-lg" />
               Logout
             </button>
           </li>
@@ -66,27 +97,19 @@ export default function Navbar() {
       )}
     </>
   );
-  console.log(darkMode);
+
   return (
-    <div className="bg-base-100 shadow-md sticky top-0 z-50">
-      {/* Drawer toggle on small screen */}
+    <div className=" fixed top-0 left-0 w-full p-2.5 z-50 ">
+      {/* Mobile Navbar */}
       <div className="drawer md:hidden">
         <input id="nav-drawer" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content flex items-center justify-between p-4">
-          <Link to="/" className="text-2xl font-bold text-primary">
-            <div className="flex items-center gap-2 mb-4">
-              <span className="text-2xl font-bold text-white tracking-widest">
-                <span className={`${darkMode ? "text-black" : "text-white"}`}> Group</span>
-                <span className="text-orange-400">Study</span>
-              </span>
-            </div>
-          </Link>
-          <div className="flex gap-3 items-center">
-            <ThemeToggle />
+          {/* Menu Button on Left */}
+          <div className="flex items-center gap-2">
             <label htmlFor="nav-drawer" className="btn btn-ghost btn-circle">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
+                className="h-6 w-6"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -99,133 +122,129 @@ export default function Navbar() {
                 />
               </svg>
             </label>
+            <Link to="/" onClick={closeDrawer}>
+              <h1 className="text-2xl font-bold">
+                Think<span className="text-orange-500">Fast</span>
+              </h1>
+            </Link>
           </div>
+          <ThemeToggle />
         </div>
 
         <div className="drawer-side z-40">
           <label htmlFor="nav-drawer" className="drawer-overlay"></label>
-          <ul
-            className="menu p-4 w-64 bg-base-200 space-y-2 h-screen md:h-auto flex flex-col"
-            style={{ minHeight: "100vh" }} // Ensures full height on all devices
-          >
+          <ul className="menu p-4 w-64 bg-base-200 space-y-2 h-screen">
             {navLinks}
             {user ? (
               <li className="mt-4 border-t pt-4">
                 <div className="dropdown dropdown-bottom">
                   <label
                     tabIndex={0}
-                    className="btn btn-ghost btn-circle avatar flex justify-start"
+                    className="btn btn-ghost btn-circle avatar"
                   >
                     <div className="w-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
                       <img
                         src={user.photoURL || damyphoto}
                         alt="profile"
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = damyphoto;
-                        }}
+                        onError={(e) => (e.target.src = damyphoto)}
                       />
                     </div>
                   </label>
                   <ul
                     tabIndex={0}
-                    className="menu dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+                    className="menu dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
                   >
                     <li className="text-center font-semibold">
                       {user.displayName}
                     </li>
                     <li>
-                      <NavLink to="/CreateAssignment">
+                      <NavLink to="/CreateAssignment" onClick={closeDrawer}>
                         Create Assignments
                       </NavLink>
                     </li>
                     <li>
-                      <NavLink to="/mysubmission">My Assignments</NavLink>
-                    </li>
-                    <li>
-                      <button onClick={handleLogout}>
-                        <FiLogOut className="inline-block mr-1" />
-                        Logout
-                      </button>
+                      <NavLink to="/mysubmission" onClick={closeDrawer}>
+                        My Assignments
+                      </NavLink>
                     </li>
                   </ul>
                 </div>
               </li>
             ) : (
-              <li className="mt-4 space-y-2 border-t pt-4">
-                <Link to="/login" className="btn text-white  btn-primary ml-4">
+              <li className="mt-4 border-t pt-4 space-y-2">
+                <Link
+                  to="/login"
+                  onClick={closeDrawer}
+                  className="btn text-white btn-primary w-full"
+                >
                   <FiLogIn className="mr-1" />
                   Login
                 </Link>
                 <Link
                   to="/register"
-                  className="btn text-white btn-primary ml-4"
+                  onClick={closeDrawer}
+                  className="btn text-white btn-primary w-full"
                 >
                   <FiLogIn className="mr-1" />
                   Register
                 </Link>
               </li>
             )}
-            {/* Add a nice gradient or divider for beauty */}
-            <div className="mt-auto">
-              <div className="h-1 w-full bg-gradient-to-r from-primary to-secondary rounded"></div>
-              <p className="text-xs text-center text-base-content mt-4 opacity-70">
-                &copy; {new Date().getFullYear()} GroupStudy
-              </p>
-            </div>
           </ul>
         </div>
       </div>
 
-      {/* Full navbar for large screens */}
-      <div className="navbar hidden md:flex px-6">
-        <div className="flex-1">
-          <Link to="/" className="text-2xl font-bold text-primary">
-            <div></div>
-            <div className="flex items-center gap-2 mb-4">
-              <span className="bg-yellow-400 rounded-full w-8 h-8 flex items-center justify-center">
-                <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-                  <polygon points="11,3 20,19 2,19" fill="#184445" />
-                </svg>
-              </span>
-              <span className="text-2xl font-bold text-white tracking-widest">
-                <span className={`${darkMode? "text-black":"text-white"}`}> Group</span>
-                <span className="text-orange-400">Study</span>
-              </span>
-            </div>
-          </Link>
-        </div>
-        <div className="flex-none flex items-center gap-2">
+      {/* Desktop Navbar */}
+      <div
+        className={`hidden md:flex justify-between  items-center px-6 py-2 w-11/12 max-w-7xl mx-auto border-2 rounded-lg shadow-sm transition-colors duration-300 ${
+          darkMode
+            ? "bg-white text-gray-900 border-black"
+            : "bg-[#1d232a] text-white border-white"
+        }`}
+      >
+        <Link to="/">
+          <h1 className="text-2xl font-bold tracking-tight">
+            Think<span className="text-orange-500">Fast</span>
+          </h1>
+        </Link>
+
+        <div className="flex items-center gap-4">
           <ThemeToggle />
-          <ul className="menu menu-horizontal px-1 gap-3">{navLinks}</ul>
+          <ul className="menu menu-horizontal gap-3 font-medium">{navLinks}</ul>
+
           {!user ? (
             <>
-              <Link to="/login" className="btn text-white btn-primary ml-4">
+              <Link
+                to="/login"
+                className="btn text-white btn-primary shadow-md"
+              >
                 <FiLogIn className="mr-1" />
                 Login
               </Link>
-              <Link to="/register" className="btn text-white btn-primary ml-4">
+              <Link
+                to="/register"
+                className="btn text-white btn-primary shadow-md"
+              >
                 <FiLogIn className="mr-1" />
                 Register
               </Link>
             </>
           ) : (
-            <div className="dropdown dropdown-end ml-4 ">
+            <div className="dropdown dropdown-end">
               <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-                <div className="w-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                <div className="w-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 overflow-hidden">
                   <img
                     src={user.photoURL || damyphoto}
                     alt="profile"
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = damyphoto;
-                    }}
+                    onError={(e) => (e.target.src = damyphoto)}
                   />
                 </div>
               </label>
               <ul
                 tabIndex={0}
-                className="menu dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+                className={`menu dropdown-content mt-3 p-2 shadow-lg rounded-box w-52 ${
+                  darkMode ? "bg-[#1d232a] text-white" : "bg-base-100"
+                }`}
               >
                 <li className="text-center font-semibold">
                   {user.displayName}
