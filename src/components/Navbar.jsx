@@ -56,7 +56,7 @@ export default function Navbar() {
       </li>
       <li>
         
-        <NavLink to="about" onClick={closeDrawer} className="font-medium">
+        <NavLink to="/about" onClick={closeDrawer} className="font-medium">
           <RiTeamFill className="inline-block text-lg mr-1" />
           About
         </NavLink>
